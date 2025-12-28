@@ -20,28 +20,8 @@ agentic-rag/
 └── vector_db/           # Persistent vector store (created at runtime)
 
 ```
+![Flow](images/flowchart.png)
 
-flowchart TD
-    Start((Start)) --> Ingest[Document Ingestion<br/>OCR / Direct]
-    Ingest --> DB[(ChromaDB)]
-    
-    subgraph AgenticLoop [Agentic Workflow]
-        direction TB
-        Retrieve[Retriever Agent] --> Generate[Generator Agent]
-        Generate --> Validate{Validator Agent}
-        Validate -- "Invalid (Retries < 3)" --> Generate
-        Validate -- "Valid / Max Retries" --> Respond[Response Agent]
-    end
-
-    User((User Query)) --> Retrieve
-    DB <--> Retrieve
-    Respond --> End((Final Answer))
-
-    %% Styling
-    classDef agent fill:#f9f,stroke:#333,stroke-width:2px
-    classDef process fill:#bbf,stroke:#333,stroke-width:2px
-    class Retrieve,Generate,Validate,Respond agent
-    class Ingest process
 
 ### Workflow
 
