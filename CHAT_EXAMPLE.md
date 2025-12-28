@@ -14,29 +14,23 @@ The system was tested with two types of documents:
 You: What is ALPHA-999-BETA?
 
 Processing...
-Assistant: Based on the document content, ALPHA-999-BETA appears to be a specific identifier or code mentioned in the standard PDF document. The document contains information about this identifier in the context of technical specifications and testing procedures.
+Assistant:Based on the context, ALPHA-999-BETA is a unique key found in the selectable text of the standard PDF test document.
 
 You: What about OMEGA-123-GAMMA?
 
 Processing...
-Assistant: OMEGA-123-GAMMA is referenced in the scanned document that was processed using OCR. The system successfully extracted text from the image-based PDF and retrieved relevant information about this identifier.
+Assistant:The context indicates that OMEGA-123-GAMMA should be found by an OCR tool within a scanned document. It is present in the provided text as a string to be identified.
 
 You: Can you compare ALPHA-999-BETA and OMEGA-123-GAMMA?
 
 Processing...
-Assistant: The system retrieved information from both documents to provide a comprehensive comparison:
-
-- ALPHA-999-BETA: Found in the standard text-based PDF, appears to be related to technical specifications
-- OMEGA-123-GAMMA: Found in the scanned PDF that was processed via OCR, contains different contextual information
-
-Both identifiers serve different purposes within their respective document contexts.
+Assistant: Based on the context, ALPHA-999-BETA and OMEGA-123-GAMMA are unique keys found in a scanned document test. ALPHA-999-BETA is selectable text in a standard PDF, while OMEGA-123-GAMMA is the text an OCR tool should find in an image. Therefore, they are distinct identifiers used in different parts of the document testing process.
 
 You: Tell me something that doesn't exist in the documents
 
 Processing...
-Assistant: [Validation failed - retrying...]
 
-Assistant: I apologize, but I couldn't find information about that topic in the provided documents. The question appears to be about something not covered in the ingested PDFs. Could you ask about content from the ALPHA-999-BETA or OMEGA-123-GAMMA documents?
+Assistant: The provided documents do not contain this information.
 
 You: quit
 ```

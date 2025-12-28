@@ -18,7 +18,6 @@ def ingest_multiple_documents(pdf_paths: list):
             continue
             
         print(f"\n--- Processing: {path} ---")
-        # load_pdf handles the logic for OCR vs Direct Extraction
         text = load_pdf(path) 
         
         print(f"Cleaning and chunking text from {os.path.basename(path)}...")
@@ -48,10 +47,8 @@ def main():
     """Main entry point updated for multi-file testing"""
     import sys
     
-    # List of files to test both pathways
     test_files = ["data/standard_test.pdf", "data/scanned_test.pdf"]
 
-    # FOR TESTING: You might want to delete existing DB to force a clean re-ingestion
     if os.path.exists("./vector_db"):
         print("Cleaning old vector database for fresh test...")
         shutil.rmtree("./vector_db")
@@ -63,7 +60,6 @@ def main():
         print(f"Ingestion failed: {e}")
         sys.exit(1)
     
-    # Create retriever and build graph
     retriever = db.as_retriever(search_kwargs={"k": 5})
     llm = get_llm()
     graph = build_graph(retriever, llm)

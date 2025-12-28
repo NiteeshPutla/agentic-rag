@@ -16,9 +16,11 @@ def generator_agent(state: AgentState, llm):
     # Construct prompt
     # Note: If this is a retry, the 'messages' list already contains the previous 
     # failed attempt and the validator's feedback, which helps the LLM self-correct.
-    prompt_text = f"""Based on the following context, answer the user's question. 
-If the context doesn't contain enough information to answer, say so.
+    prompt_text = f"""You are a strict assistant. Answer the user's question using ONLY the context provided.
 
+    If the user asks for information not present in the context, or asks for examples of what is missing, 
+    simply state: "The provided documents do not contain this information." 
+    Do NOT invent placeholder strings or identifiers to illustrate what is missing.
 Context:
 {context}
 

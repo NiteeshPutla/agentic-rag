@@ -7,21 +7,19 @@ from app.llm.models import get_llm
 
 st.set_page_config(page_title="Agentic RAG Assistant", layout="wide")
 
-# Initialize Session State for Chat History
 if "messages" not in st.session_state:
     st.session_state.messages = []
 
 if "retriever" not in st.session_state:
     st.session_state.retriever = None
 
-# Sidebar for Ingestion
 with st.sidebar:
     st.title("📂 Document Management")
     uploaded_files = st.file_uploader("Upload PDFs", type="pdf", accept_multiple_files=True)
     
     if st.button("Process Documents"):
         if uploaded_files:
-            # Save uploaded files to data folder
+            
             pdf_paths = []
             if not os.path.exists("data"):
                 os.makedirs("data")
@@ -39,26 +37,23 @@ with st.sidebar:
         else:
             st.error("Please upload at least one PDF.")
 
-# Main Chat Interface
 st.title("🤖 Agentic RAG Assistant")
 st.caption("Powered by LangGraph, MCP OCR, and Gemini")
 
-# Display chat history
 for message in st.session_state.messages:
     with st.chat_message(message["role"]):
         st.markdown(message["content"])
 
-# Chat Input
 if prompt := st.chat_input("Ask about your documents..."):
     if st.session_state.retriever is None:
         st.warning("Please process documents in the sidebar first.")
     else:
-        # Add user message to history
+    
         st.session_state.messages.append({"role": "user", "content": prompt})
         with st.chat_message("user"):
             st.markdown(prompt)
 
-        # Generate Response
+        
         with st.chat_message("assistant"):
             with st.spinner("Analyzing documents..."):
                 llm = get_llm()
@@ -66,5 +61,5 @@ if prompt := st.chat_input("Ask about your documents..."):
                 answer = chat_with_document(prompt, st.session_state.retriever, graph)
                 st.markdown(answer)
         
-        # Add assistant message to history
+        
         st.session_state.messages.append({"role": "assistant", "content": answer})
