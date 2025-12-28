@@ -21,6 +21,28 @@ agentic-rag/
 
 ```
 
+flowchart TD
+    Start((Start)) --> Ingest[Document Ingestion<br/>OCR / Direct]
+    Ingest --> DB[(ChromaDB)]
+    
+    subgraph AgenticLoop [Agentic Workflow]
+        direction TB
+        Retrieve[Retriever Agent] --> Generate[Generator Agent]
+        Generate --> Validate{Validator Agent}
+        Validate -- "Invalid (Retries < 3)" --> Generate
+        Validate -- "Valid / Max Retries" --> Respond[Response Agent]
+    end
+
+    User((User Query)) --> Retrieve
+    DB <--> Retrieve
+    Respond --> End((Final Answer))
+
+    %% Styling
+    classDef agent fill:#f9f,stroke:#333,stroke-width:2px
+    classDef process fill:#bbf,stroke:#333,stroke-width:2px
+    class Retrieve,Generate,Validate,Respond agent
+    class Ingest process
+
 ### Workflow
 
 The system uses LangGraph to orchestrate an agentic workflow:
@@ -106,5 +128,11 @@ This interface allows for easy document uploads and real-time chat with the agen
 
 ![Streamlit Web Interface](images/streamlit.PNG)
 
+
+## Design Rationale
+
+- **Self-Correction Loop**: The system uses a Validator Agent to check for hallucinations. If a response isn't grounded in the context, the system retries (up to 3 times) while passing the previous error back to the LLM for self-correction.
+- **Dual Ingestion Pathway**: To handle both digital and scanned PDFs, the system uses a heuristic check; standard extraction is tried first, with a fallback to DeepSeek OCR via Simplismart for image-based documents.
+- **Stateful Orchestration**: LangGraph manages the `AgentState`, ensuring that conversation history and retrieved documents are consistently available across all agent nodes.
 
 **Author:** Niteesh Putla
