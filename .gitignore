@@ -6,6 +6,6 @@ dist/
 wheels/
 *.egg-info
 vector_db/
-
+.env
 # Virtual environments
 .venv
