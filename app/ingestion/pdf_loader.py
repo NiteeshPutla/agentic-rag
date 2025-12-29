@@ -38,9 +38,7 @@ def load_pdf(path: str) -> str:
     # Step 2: Fall back to OCR (for scanned PDFs or image-based PDFs)
     print("Detected scanned/image-based PDF - using OCR")
     images = convert_from_path(
-        path,
-        poppler_path=r"C:\Program Files\poppler-25.12.0\Library\bin"
-    
+        path    
     )
     ocr = DeepSeekOCRClient()
 

@@ -76,7 +76,6 @@ The system requires Poppler for PDF-to-image conversion during OCR processing.
    - Right-click "This PC" → Properties → Advanced system settings
    - Click "Environment Variables" → Select "Path" → Edit
    - Add: `C:\Program Files\poppler-25.12.0\Library\bin`
-4. **Or configure manually**: If PATH is not set, the system uses a hardcoded path in `app/ingestion/pdf_loader.py` (lines 41-42)
 
 #### macOS:
 ```bash
