@@ -1,7 +1,7 @@
 import streamlit as st
 import os
 from main import ingest_multiple_documents, chat_with_document
-from app.embeddings.vector_store import load_vector_store
+from app.embeddings.vector_store import load_vector_store, get_retriever_k
 from app.graph.rag_graph import build_graph
 from app.llm.models import get_llm
 
@@ -32,7 +32,7 @@ with st.sidebar:
             
             with st.spinner("Ingesting documents (Direct & OCR)..."):
                 db = ingest_multiple_documents(pdf_paths)
-                st.session_state.retriever = db.as_retriever(search_kwargs={"k": 5})
+                st.session_state.retriever = db.as_retriever(search_kwargs={"k": get_retriever_k()})
                 st.success("Documents Ingested Successfully!")
         else:
             st.error("Please upload at least one PDF.")

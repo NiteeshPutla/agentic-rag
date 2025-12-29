@@ -2,6 +2,8 @@ from pdf2image import convert_from_path
 from .ocr import DeepSeekOCRClient
 from pypdf import PdfReader
 import io
+import os
+import logging
 
 
 def extract_text_from_pdf(pdf_path: str) -> str:
@@ -20,41 +22,59 @@ def extract_text_from_pdf(pdf_path: str) -> str:
         print(f"Error extracting text from PDF: {e}")
         return ""
 
+logger = logging.getLogger(__name__)
+
 def load_pdf(path: str) -> str:
-    """
-    Load PDF document supporting both standard and scanned PDFs.
-    
-    Strategy:
-    1. First, try to extract text directly (for standard PDFs)
-    2. If extraction yields little/no text, use OCR (for scanned PDFs)
-    """
+    # 1. Try Direct Extraction First (Cost & Speed Optimization)
     direct_text = extract_text_from_pdf(path)
     
-  
-    if len(direct_text.strip()) > 100:
-        print("Detected standard PDF - using direct text extraction")
+    # Threshold check: If we got enough text, skip heavy OCR
+    if len(direct_text.strip()) > 150: 
+        print("✅ Standard PDF detected: Using direct extraction.")
         return direct_text
     
-    # Step 2: Fall back to OCR (for scanned PDFs or image-based PDFs)
-    print("Detected scanned/image-based PDF - using OCR")
-    images = convert_from_path(
-        path    
-    )
-    ocr = DeepSeekOCRClient()
-
-    text_chunks = []
-    for img in images:
-        # Convert PIL Image to bytes for OCR
-        img_bytes = io.BytesIO()
-        img.save(img_bytes, format='PNG')
-        img_bytes.seek(0)
-        text = ocr.extract_text(img_bytes.read())
-        text_chunks.append(text)
-
-    ocr_text = "\n".join(text_chunks)
+    # 2. Fallback to OCR
+    print("🔍 Low text density: Attempting OCR Pathway...")
     
-    # If OCR also fails, combine both methods
-    if not ocr_text.strip() and direct_text.strip():
+    poppler_path = find_poppler()
+    
+    try:
+        images = convert_from_path(path, poppler_path=poppler_path)
+        ocr = DeepSeekOCRClient()
+        
+        ocr_results = []
+        for i, img in enumerate(images):
+            img_byte_arr = io.BytesIO()
+            img.save(img_byte_arr, format='PNG')
+            text = ocr.extract_text(img_byte_arr.getvalue())
+            ocr_results.append(text)
+            
+        return "\n".join(ocr_results)
+
+    except Exception as e:
+        logger.error(f"OCR Pathway failed: {e}")
+        # Final Fallback: Return whatever little direct text we found
+        print("⚠️ OCR Failed (Poppler missing?). Falling back to partial direct text.")
         return direct_text
-    
-    return ocr_text if ocr_text.strip() else direct_text
+
+def find_poppler():
+    """Dynamically finds poppler"""
+    if os.name != 'nt':
+        return None # Assume it's in PATH on Linux/Mac
+        
+    # Check environment variable first (Best Practice)
+    env_path = os.environ.get("POPPLER_PATH")
+    if env_path and os.path.exists(env_path):
+        return env_path
+
+    # Check common root directories
+    base_dirs = [r"C:\Program Files", r"C:\poppler", os.getcwd()]
+    for base in base_dirs:
+        if not os.path.exists(base): continue
+        # Look for any folder starting with 'poppler'
+        for folder in os.listdir(base):
+            if folder.lower().startswith("poppler"):
+                full_path = os.path.join(base, folder, "Library", "bin")
+                if os.path.exists(full_path):
+                    return full_path
+    return None

@@ -70,9 +70,9 @@ pip install -e .
 The system requires Poppler for PDF-to-image conversion during OCR processing.
 
 #### Windows:
-1. Download Poppler for Windows from: http://blog.alivate.com.au/poppler-windows/
+1. Download Poppler for Windows from: https://github.com/oschwartz10612/poppler-windows/releases/tag/v25.12.0-0
 2. Extract the files to a folder (e.g., `C:\Program Files\poppler-25.12.0\`)
-3. **Add to PATH**: Add the `Library\bin` folder to your system PATH:
+3. **Recommended: Add to PATH**: Add the `Library\bin` folder to your system PATH:
    - Right-click "This PC" → Properties → Advanced system settings
    - Click "Environment Variables" → Select "Path" → Edit
    - Add: `C:\Program Files\poppler-25.12.0\Library\bin`
@@ -145,8 +145,14 @@ DEFAULT_HEADERS_ID={"id": "simplismart header"}
 # TESSERACT_CMD=/usr/bin/tesseract  # Linux/Mac
 # TESSERACT_CMD=C:\Program Files\Tesseract-OCR\tesseract.exe  # Windows
 
+# POPPLER_PATH=C:\Program Files\poppler-25.12.0\Library\bin
+
+
 # Embedding Model Configuration (optional - uses default if not set)
 # EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-V2
+
+# Retriever Configuration (optional - uses default if not set)
+# RETRIEVER_K=5  # Number of documents to retrieve (higher = more context, slower)
 ```
 
 ## Execution Instructions

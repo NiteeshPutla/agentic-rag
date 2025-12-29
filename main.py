@@ -1,5 +1,5 @@
 from langchain_core.messages import HumanMessage
-from app.embeddings.vector_store import build_vector_store, load_vector_store
+from app.embeddings.vector_store import build_vector_store, load_vector_store, get_retriever_k
 from app.graph.rag_graph import build_graph
 from app.ingestion.cleaner import clean_and_chunk
 from app.ingestion.pdf_loader import load_pdf
@@ -60,7 +60,7 @@ def main():
         print(f"Ingestion failed: {e}")
         sys.exit(1)
     
-    retriever = db.as_retriever(search_kwargs={"k": 5})
+    retriever = db.as_retriever(search_kwargs={"k": get_retriever_k()})
     llm = get_llm()
     graph = build_graph(retriever, llm)
     

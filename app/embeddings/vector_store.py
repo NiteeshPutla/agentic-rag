@@ -6,6 +6,10 @@ def get_embedding_model():
     """Get the embedding model name from environment variables"""
     return os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-V2")
 
+def get_retriever_k():
+    """Get the number of documents to retrieve from environment variables"""
+    return int(os.getenv("RETRIEVER_K", "5"))
+
 def build_vector_store(docs):
     embeddings = HuggingFaceEmbeddings(
         model_name=get_embedding_model()
