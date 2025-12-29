@@ -17,14 +17,10 @@ class DeepSeekOCRClient:
     This class provides an interface to DeepSeek OCR API. 
     
     Integration Points:
-    - API_KEY: Set DEEPSEEK_API_KEY in .env file
-    - API_ENDPOINT: DeepSeek OCR API endpoint URL
+    - API_KEY: Set DEEPSEEK_API_KEY(simplismart) in .env file
+    - API_ENDPOINT: DeepSeek OCR API(simplismart) endpoint URL
+    - DEFAULT_HEADERS_ID : Header ID from simplismart
     - extract_text(): Main method that calls DeepSeek OCR API
-    
-    To integrate with real DeepSeek OCR API:
-    1. Add DEEPSEEK_API_KEY to your .env file
-    2. Replace the mocked implementation in extract_text() with actual API call
-    3. Update API_ENDPOINT if different from default
     """
     
     def __init__(self, api_key: Optional[str] = None, api_endpoint: Optional[str] = None):
@@ -37,8 +33,7 @@ class DeepSeekOCRClient:
         """
         self.api_key = api_key or os.getenv("DEEPSEEK_API_KEY")
         self.api_endpoint = api_endpoint or os.getenv(
-            "DEEPSEEK_OCR_ENDPOINT", 
-            "https://api.deepseek.com/v1" 
+            "DEEPSEEK_OCR_ENDPOINT" 
         )
     
     def extract_text(self, image_bytes: bytes) -> str:
@@ -68,9 +63,7 @@ class DeepSeekOCRClient:
        
         
     def _mocked_extract_text(self, image_bytes: bytes) -> str:
-        """
-        Mocked OCR implementation for testing/development.
-        
+        """        
         This method simulates OCR output when DeepSeek OCR API is unavailable.
         """
     
