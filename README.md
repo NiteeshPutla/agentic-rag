@@ -88,7 +88,6 @@ sudo apt-get update
 sudo apt-get install poppler-utils
 ```
 
-**Note**: If Poppler is not found, PDF OCR processing will fail. The system will attempt to use the hardcoded Windows path if PATH is not configured.
 
 ### 4. Set Up Environment Variables
 
