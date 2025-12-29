@@ -145,6 +145,8 @@ DEFAULT_HEADERS_ID={"id": "simplismart header"}
 # TESSERACT_CMD=/usr/bin/tesseract  # Linux/Mac
 # TESSERACT_CMD=C:\Program Files\Tesseract-OCR\tesseract.exe  # Windows
 
+# Embedding Model Configuration (optional - uses default if not set)
+# EMBEDDING_MODEL=sentence-transformers/all-MiniLM-L6-V2
 ```
 
 ## Execution Instructions

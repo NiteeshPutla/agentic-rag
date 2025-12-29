@@ -1,9 +1,14 @@
+import os
 from langchain_community.vectorstores import Chroma
 from langchain_huggingface import HuggingFaceEmbeddings
 
+def get_embedding_model():
+    """Get the embedding model name from environment variables"""
+    return os.getenv("EMBEDDING_MODEL", "sentence-transformers/all-MiniLM-L6-V2")
+
 def build_vector_store(docs):
     embeddings = HuggingFaceEmbeddings(
-        model_name = "sentence-transformers/all-MiniLM-L6-V2"
+        model_name=get_embedding_model()
     )
 
     db = Chroma.from_documents(
@@ -17,7 +22,7 @@ def build_vector_store(docs):
 def load_vector_store():
     """Load existing vector store from disk"""
     embeddings = HuggingFaceEmbeddings(
-        model_name = "sentence-transformers/all-MiniLM-L6-V2"
+        model_name=get_embedding_model()
     )
     
     db = Chroma(
