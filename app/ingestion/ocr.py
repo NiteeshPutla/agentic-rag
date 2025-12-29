@@ -63,12 +63,22 @@ class DeepSeekOCRClient:
        
         
     def _mocked_extract_text(self, image_bytes: bytes) -> str:
-        """        
+        """
         This method simulates OCR output when DeepSeek OCR API is unavailable.
         """
-    
+
         image = Image.open(io.BytesIO(image_bytes))
-        pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+
+        # Configure Tesseract path (cross-platform support)
+        tesseract_cmd = os.getenv("TESSERACT_CMD")
+        if not tesseract_cmd:
+            # Provide platform-specific defaults
+            if os.name == 'nt':  # Windows
+                tesseract_cmd = r'C:\Program Files\Tesseract-OCR\tesseract.exe'
+            else:  # Linux/Mac - assume tesseract is in PATH
+                tesseract_cmd = 'tesseract'
+
+        pytesseract.pytesseract.tesseract_cmd = tesseract_cmd
 
         text = pytesseract.image_to_string(image)
 

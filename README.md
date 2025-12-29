@@ -88,6 +88,28 @@ sudo apt-get update
 sudo apt-get install poppler-utils
 ```
 
+#### Install Tesseract OCR (Optional - for mocked OCR)
+
+If DeepSeek OCR API is not available, the system falls back to Tesseract OCR for text extraction from images.
+
+**Windows:**
+1. Download Tesseract from: https://github.com/UB-Mannheim/tesseract/wiki
+2. Install the executable
+3. The system will automatically detect `C:\Program Files\Tesseract-OCR\tesseract.exe`
+4. Or set `TESSERACT_CMD` in your `.env` file if installed elsewhere
+
+**macOS:**
+```bash
+brew install tesseract
+```
+
+**Linux (Ubuntu/Debian):**
+```bash
+sudo apt-get update
+sudo apt-get install tesseract-ocr
+```
+
+**Note**: Tesseract is only used as a fallback when DeepSeek OCR API is unavailable. Set `DEEPSEEK_API_KEY` in your `.env` file to use the preferred OCR method.
 
 ### 4. Set Up Environment Variables
 
@@ -118,6 +140,10 @@ GEMINI_MODEL=gemini-2.0-flash
 DEEPSEEK_API_KEY="simplismart-deepseek_api_key"
 DEEPSEEK_OCR_ENDPOINT=https://api.simplismart.live
 DEFAULT_HEADERS_ID={"id": "simplismart header"}
+
+# Tesseract OCR Configuration (optional - uses platform defaults if not set)
+# TESSERACT_CMD=/usr/bin/tesseract  # Linux/Mac
+# TESSERACT_CMD=C:\Program Files\Tesseract-OCR\tesseract.exe  # Windows
 
 ```
 
