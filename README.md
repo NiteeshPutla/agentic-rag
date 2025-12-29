@@ -65,7 +65,48 @@ pip install -e .
 
 ```
 
-### 2. Set Up Environment Variables
+### 3. Install Poppler (Required for PDF Processing)
+
+The system requires Poppler for PDF-to-image conversion during OCR processing.
+
+#### Windows:
+1. Download Poppler for Windows from: http://blog.alivate.com.au/poppler-windows/
+2. Extract the files to a folder (e.g., `C:\Program Files\poppler-25.12.0\`)
+3. **Add to PATH**: Add the `Library\bin` folder to your system PATH:
+   - Right-click "This PC" → Properties → Advanced system settings
+   - Click "Environment Variables" → Select "Path" → Edit
+   - Add: `C:\Program Files\poppler-25.12.0\Library\bin`
+4. **Or configure manually**: If PATH is not set, the system uses a hardcoded path in `app/ingestion/pdf_loader.py` (lines 41-42)
+
+#### macOS:
+```bash
+brew install poppler
+```
+
+#### Linux (Ubuntu/Debian):
+```bash
+sudo apt-get update
+sudo apt-get install poppler-utils
+```
+
+**Note**: If Poppler is not found, PDF OCR processing will fail. The system will attempt to use the hardcoded Windows path if PATH is not configured.
+
+### 4. Set Up Environment Variables
+
+#### Obtaining API Keys
+
+**Google Gemini API Key:**
+- Visit [Google AI Studio](https://aistudio.google.com/)
+- Sign in with your Google account
+- Create a new API key or use an existing one
+- Copy the API key for use in your `.env` file
+
+**DeepSeek OCR API Key (Simplismart):**
+- Visit [Simplismart Playground](https://app.simplismart.ai/playground?model_id=81095ce8-515a-442a-8514-d4424ec84ce2)
+- Sign up for an account if you don't have one
+- Navigate to API settings or account section
+- Generate your API key and header ID
+- Use these credentials in your `.env` file
 
 Create a `.env` file in the root directory and add your credentials:
 
